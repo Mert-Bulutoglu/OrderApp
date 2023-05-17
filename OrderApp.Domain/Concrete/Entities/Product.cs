@@ -15,7 +15,9 @@ namespace OrderApp.Domain.Concrete.Entities
         public string? Unit { get; set; }
         public decimal UnitPrice { get; set; }
         public string? Status { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime UpdateDate { get; set; }
+
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }
