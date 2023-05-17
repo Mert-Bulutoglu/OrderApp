@@ -11,7 +11,7 @@ namespace OrderApp.Repository.Services
     public interface IGenericService<T> where T : class
     {
         public Task<ApiResponseDto<T>> GetByIdAsync(int id);
-        public Task<ApiResponseDto<T>> GetAllAsync();
+        public Task<ApiResponseDto<List<T>>> GetAllAsync();
         public Task<ApiResponseDto<List<T>>> Where(Expression<Func<T, bool>> expression);
         public Task<ApiResponseDto<T>> AnyAsync(Expression<Func<T, bool>> expression);
         public Task<ApiResponseDto<T>> AddAsync(T entity);
