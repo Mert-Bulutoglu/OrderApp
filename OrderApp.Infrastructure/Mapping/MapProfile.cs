@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OrderApp.Domain.Concrete.Entities;
 using OrderApp.Repository.DTOs.EntityDtos;
+using OrderApp.Repository.DTOs.EntityDTOs;
 using OrderApp.Repository.DTOs.ResponseDTOs;
 using StackExchange.Redis;
 using System;
@@ -16,6 +17,7 @@ namespace OrderApp.Infrastructure.Mapping
         public MapProfile()
         {
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<OrderApp.Domain.Concrete.Entities.Order, OrderDto>().ReverseMap();
             CreateMap<CreateOrderRequestDto, OrderApp.Domain.Concrete.Entities.Order>();
             CreateMap<CreateOrderRequestDto, OrderDetail>();
 

@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace OrderApp.Repository.Services
 {
-    public interface IGenericService<T> where T : class
+    public interface IGenericService<T, TDto> where T : class
     {
-        public Task<ApiResponseDto<T>> GetByIdAsync(int id);
-        public Task<ApiResponseDto<List<T>>> GetAllAsync();
-        public Task<ApiResponseDto<List<T>>> Where(Expression<Func<T, bool>> expression);
-        public Task<ApiResponseDto<T>> AnyAsync(Expression<Func<T, bool>> expression);
-        public Task<ApiResponseDto<T>> AddAsync(T entity);
-        public Task<ApiResponseDto<List<T>>> AddRangeAsync(List<T> entities);
-        public Task<ApiResponseDto<T>> UpdateAsync(T entity);
-        public Task<ApiResponseDto<T>> RemoveAsync(int id);
-        public Task<ApiResponseDto<List<T>>> RemoveRangeAsync(List<T> entities);
+        public Task<ApiResponseDto<TDto>> GetByIdAsync(int id);
+        public Task<ApiResponseDto<List<TDto>>> GetAllAsync();
+        public Task<ApiResponseDto<List<TDto>>> Where(Expression<Func<T, bool>> expression);
+        public Task<ApiResponseDto<TDto>> AnyAsync(Expression<Func<T, bool>> expression);
+        public Task<ApiResponseDto<TDto>> AddAsync(TDto entity);
+        public Task<ApiResponseDto<List<TDto>>> AddRangeAsync(List<TDto> entities);
+        public Task<ApiResponseDto<TDto>> UpdateAsync(TDto entity);
+        public Task<ApiResponseDto<TDto>> RemoveAsync(int id);
+        public Task<ApiResponseDto<List<TDto>>> RemoveRangeAsync(List<TDto> entities);
     }
 }

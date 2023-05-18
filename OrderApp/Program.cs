@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApp.API.Extensions;
+using OrderApp.Infrastructure.Mapping;
 using OrderApp.Persistance.Context;
 using System.Reflection;
 
@@ -11,7 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 
 builder.Services.AddDbContext<AppDbContext>(x =>

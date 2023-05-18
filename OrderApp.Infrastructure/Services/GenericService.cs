@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace OrderApp.Infrastructure.Services
 {
-    public class GenericService<T> : IGenericService<T> where T : class
+    public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class
     {
         private readonly IGenericRepository<T> _repository;
         private readonly IMapper _mapper;
@@ -28,24 +28,24 @@ namespace OrderApp.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponseDto<T>> AddAsync(T entity)
+        public async Task<ApiResponseDto<TDto>> AddAsync(TDto entity)
         {
             var mapped = _mapper.Map<T>(entity);
             await _repository.AddAsync(mapped);
             await _unitOfWork.CommitAsync();
-            return ApiResponseDto<T>.Success(entity);
+            return ApiResponseDto<TDto>.Success(entity);
 
         }
 
-        public async Task<ApiResponseDto<List<T>>> AddRangeAsync(List<T> entities)
+        public async Task<ApiResponseDto<List<TDto>>> AddRangeAsync(List<TDto> entities)
         {
             var mapped = _mapper.Map<List<T>>(entities);
             await _repository.AddRangeAsync(mapped);
             await _unitOfWork.CommitAsync();
-            return ApiResponseDto<List<T>>.Success(entities);
+            return ApiResponseDto<List<TDto>>.Success(entities);
         }
 
-        public async Task<ApiResponseDto<T>> AnyAsync(Expression<Func<T, bool>> expression)
+        public async Task<ApiResponseDto<TDto>> AnyAsync(Expression<Func<T, bool>> expression)
         {
             var entity = await _repository.AnyAsync(expression);
 
@@ -54,11 +54,11 @@ namespace OrderApp.Infrastructure.Services
                 throw new NotFoundException(MagicStrings.NotFoundMessage<T>());
             }
 
-            var mapped = _mapper.Map<T>(entity);
-            return ApiResponseDto<T>.Success(mapped);
+            var mapped = _mapper.Map<TDto>(entity);
+            return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<List<T>>> GetAllAsync()
+        public async Task<ApiResponseDto<List<TDto>>> GetAllAsync()
         {
             var entities = await _repository.GetAll().ToListAsync();
 
@@ -67,12 +67,12 @@ namespace OrderApp.Infrastructure.Services
                 throw new NotFoundException(MagicStrings.NotFoundMessage<T>());
             }
 
-            var mapped = _mapper.Map<List<T>>(entities);
+            var mapped = _mapper.Map<List<TDto>>(entities);
 
-            return ApiResponseDto<List<T>>.Success(mapped);
+            return ApiResponseDto<List<TDto>>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<T>> GetByIdAsync(int id)
+        public async Task<ApiResponseDto<TDto>> GetByIdAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
 
@@ -80,12 +80,12 @@ namespace OrderApp.Infrastructure.Services
             {
                 throw new NotFoundException(MagicStrings.NotFoundMessage<T>());
             }
-            var mapped = _mapper.Map<T>(entity);
+            var mapped = _mapper.Map<TDto>(entity);
 
-            return ApiResponseDto<T>.Success(mapped);
+            return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<T>> RemoveAsync(int id)
+        public async Task<ApiResponseDto<TDto>> RemoveAsync(int id)
         {
             var remove = await _repository.GetByIdAsync(id);
 
@@ -97,18 +97,18 @@ namespace OrderApp.Infrastructure.Services
             var entity = await _repository.GetByIdAsync(id);
             _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
-            var mapped = _mapper.Map<T>(entity);
-            return ApiResponseDto<T>.Success(mapped);
+            var mapped = _mapper.Map<TDto>(entity);
+            return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<List<T>>> RemoveRangeAsync(List<T> entities)
+        public async Task<ApiResponseDto<List<TDto>>> RemoveRangeAsync(List<TDto> entities)
         {
             try
             {
                 var mapped = _mapper.Map<IEnumerable<T>>(entities);
                 _repository.RemoveRange(mapped);
                 await _unitOfWork.CommitAsync();
-                return ApiResponseDto<List<T>>.Success(entities);
+                return ApiResponseDto<List<TDto>>.Success(entities);
 
             }
             catch
@@ -117,14 +117,15 @@ namespace OrderApp.Infrastructure.Services
             }
         }
 
-        public async Task<ApiResponseDto<T>> UpdateAsync(T entity)
+        public async Task<ApiResponseDto<TDto>> UpdateAsync(TDto entity)
         {
             try
             {
                 var mapped = _mapper.Map<T>(entity);
                 _repository.Update(mapped);
                 await _unitOfWork.CommitAsync();
-                return ApiResponseDto<T>.Success(mapped);
+                var mappedDto = _mapper.Map<TDto>(entity);
+                return ApiResponseDto<TDto>.Success(mappedDto);
             }
             catch
             {
@@ -132,7 +133,7 @@ namespace OrderApp.Infrastructure.Services
             }
         }
 
-        public async Task<ApiResponseDto<List<T>>> Where(Expression<Func<T, bool>> expression)
+        public async Task<ApiResponseDto<List<TDto>>> Where(Expression<Func<T, bool>> expression)
         {
             var entities = await _repository.Where(expression).ToListAsync();
 
@@ -140,8 +141,8 @@ namespace OrderApp.Infrastructure.Services
             {
                 throw new NotFoundException(MagicStrings.NotFoundMessage<T>());
             }
-            var mapped = _mapper.Map<List<T>>(entities);
-            return ApiResponseDto<List<T>>.Success(mapped);
+            var mapped = _mapper.Map<List<TDto>>(entities);
+            return ApiResponseDto<List<TDto>>.Success(mapped);
         }
     }
 }

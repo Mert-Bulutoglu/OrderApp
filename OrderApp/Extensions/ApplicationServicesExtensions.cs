@@ -1,4 +1,5 @@
-﻿using OrderApp.Persistance.Repositories;
+﻿using OrderApp.Infrastructure.Services;
+using OrderApp.Persistance.Repositories;
 using OrderApp.Persistance.UnitOfWorks;
 using OrderApp.Repository.Repositories;
 using OrderApp.Repository.Services;
@@ -11,11 +12,15 @@ namespace OrderApp.API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             #region Repositories
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
             #region Services
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped(typeof(IGenericService<>), typeof(IGenericService<>));
+            services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
             #endregion
 
             return services;
