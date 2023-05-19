@@ -10,7 +10,6 @@ namespace OrderApp.Domain.Concrete.Entities
     public class ProductDetail : IBaseEntity
     {
         public int Id { get; set; }
-        public decimal UnitPrice { get; set; }
         public int Amount { get; set; }
 
     }

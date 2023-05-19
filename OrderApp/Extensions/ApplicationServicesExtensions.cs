@@ -16,6 +16,7 @@ namespace OrderApp.API.Extensions
             #region Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
             #region Services

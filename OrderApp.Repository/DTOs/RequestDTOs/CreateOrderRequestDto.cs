@@ -9,6 +9,7 @@ namespace OrderApp.Repository.DTOs.RequestDTOs
 {
     public class CreateOrderRequestDto
     {
+        public int Id { get; set; }
         public string? CustomerName { get; set; }
         public string? CustomerEmail { get; set; }
         public string? CustomerGSM { get; set; }
