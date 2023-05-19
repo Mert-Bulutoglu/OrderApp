@@ -32,5 +32,11 @@ namespace OrderApp.API.Controllers
 
             return Ok(await _service.RemoveAsync(id));
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Save(CreateOrderRequestDto createOrderRequestDto)
+        {
+            return Ok(await _service.AddAsync(createOrderRequestDto));
+        }
     }
 }

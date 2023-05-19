@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApp.API.Extensions;
 using OrderApp.API.Middlewares;
+using OrderApp.Caching.Configurations;
 using OrderApp.Infrastructure.Mapping;
 using OrderApp.Persistance.Context;
 using System.Reflection;
@@ -23,6 +24,9 @@ builder.Services.AddDbContext<AppDbContext>(x =>
         mySqlOptions.MigrationsAssembly(Assembly.GetAssembly(typeof(AppDbContext)).GetName().Name);
     });
 });
+
+var redisConfiguration = builder.Configuration.GetSection("ConnectionStrings").Get<RedisConfiguration>();
+builder.Services.AddSingleton(redisConfiguration);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerGen();

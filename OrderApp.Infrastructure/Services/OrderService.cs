@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using OrderApp.Domain.Concrete.Entities;
 using OrderApp.Repository.DTOs.EntityDTOs;
+using OrderApp.Repository.DTOs.RequestDTOs;
+using OrderApp.Repository.DTOs.ResponseDTOs;
 using OrderApp.Repository.Repositories;
 using OrderApp.Repository.Services;
 using OrderApp.Repository.UnitOfWorks;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OrderApp.Infrastructure.Services
 {
-    public class OrderService : GenericService<Order, OrderDto>, IOrderService
+    public class OrderService : GenericService<Order, CreateOrderRequestDto>, IOrderService
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
@@ -25,6 +27,11 @@ namespace OrderApp.Infrastructure.Services
             _mapper = mapper;
             _filterService = filterService;
             _unitOfWork = unitOfWork;
+        }
+
+        public override Task<ApiResponseDto<CreateOrderRequestDto>> AddAsync(CreateOrderRequestDto entity)
+        {
+            return base.AddAsync(entity);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using OrderApp.Infrastructure.Services;
+﻿using OrderApp.Caching.Services;
+using OrderApp.Infrastructure.Services;
 using OrderApp.Persistance.Repositories;
 using OrderApp.Persistance.UnitOfWorks;
+using OrderApp.Repository.Cache;
 using OrderApp.Repository.Repositories;
 using OrderApp.Repository.Services;
 using OrderApp.Repository.UnitOfWorks;
@@ -23,6 +25,7 @@ namespace OrderApp.API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
             services.AddScoped(typeof(IFilterService<>), typeof(FilterService<>));
+            services.AddScoped(typeof(ICacheService<>), typeof(CacheService<>));
             #endregion
 
             return services;
