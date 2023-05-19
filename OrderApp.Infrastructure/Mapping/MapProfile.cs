@@ -18,8 +18,8 @@ namespace OrderApp.Infrastructure.Mapping
         {
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<OrderApp.Domain.Concrete.Entities.Order, OrderDto>().ReverseMap();
-            CreateMap<CreateOrderRequestDto, OrderApp.Domain.Concrete.Entities.Order>();
-            CreateMap<CreateOrderRequestDto, OrderDetail>();
+            CreateMap<CreateOrderRequestDto, OrderApp.Domain.Concrete.Entities.Order>().ReverseMap();
+            CreateMap<CreateOrderRequestDto, OrderDetail>().ReverseMap();
 
         }
     }

@@ -50,6 +50,11 @@ namespace OrderApp.Persistance.Repositories
             return await _dbSet.FindAsync(id);
         }
 
+        public IQueryable<T> GetQuery()
+        {
+            return _dbSet.AsQueryable();
+        }
+
         public void Remove(T entity)
         {
 
