@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OrderApp.Caching\OrderApp.Caching.csproj" />
     <ProjectReference Include="..\OrderApp.Infrastructure\OrderApp.Infrastructure.csproj" />
   </ItemGroup>
 

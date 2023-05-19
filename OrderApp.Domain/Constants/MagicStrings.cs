@@ -9,6 +9,11 @@ namespace OrderApp.Domain.Constants
     public static class MagicStrings
     {
 
+
+        #region CacheKeys
+        public const string ProductsCacheKey = "Products";
+        #endregion
+
         #region ExceptionValues
 
         public const string BadRequestExceptionValue = "BadRequestException";
