@@ -1,5 +1,6 @@
 ﻿using Autofac.Core;
 using Microsoft.AspNetCore.Mvc;
+using OrderApp.Repository.DTOs.RequestDTOs;
 using OrderApp.Repository.Services;
 
 namespace OrderApp.API.Controllers
@@ -13,10 +14,10 @@ namespace OrderApp.API.Controllers
             _service = productService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> All()
+        [HttpPost]
+        public async Task<IActionResult> All(List<FilterDTO> Filters)
         {
-            return Ok(await _service.GetAllAsync());
+            return Ok(await _service.GetAllAsync(Filters));
         }
 
         [HttpGet("{id}")]

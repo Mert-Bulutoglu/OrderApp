@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OrderApp.Domain.Concrete.Entities;
 using OrderApp.Domain.Constants;
 using OrderApp.Infrastructure.Exceptions;
+using OrderApp.Repository.DTOs.RequestDTOs;
 using OrderApp.Repository.DTOs.ResponseDTOs;
 using OrderApp.Repository.Repositories;
 using OrderApp.Repository.Services;
@@ -21,14 +23,16 @@ namespace OrderApp.Infrastructure.Services
         private readonly IGenericRepository<T> _repository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public GenericService(IGenericRepository<T> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IFilterService<T> _filterService;
+        public GenericService(IGenericRepository<T> repository, IFilterService<T> filterService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repository = repository;
+            _filterService = filterService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<ApiResponseDto<TDto>> AddAsync(TDto entity)
+        public virtual async Task<ApiResponseDto<TDto>> AddAsync(TDto entity)
         {
             var mapped = _mapper.Map<T>(entity);
             await _repository.AddAsync(mapped);
@@ -37,7 +41,7 @@ namespace OrderApp.Infrastructure.Services
 
         }
 
-        public async Task<ApiResponseDto<List<TDto>>> AddRangeAsync(List<TDto> entities)
+        public virtual async Task<ApiResponseDto<List<TDto>>> AddRangeAsync(List<TDto> entities)
         {
             var mapped = _mapper.Map<List<T>>(entities);
             await _repository.AddRangeAsync(mapped);
@@ -45,7 +49,7 @@ namespace OrderApp.Infrastructure.Services
             return ApiResponseDto<List<TDto>>.Success(entities);
         }
 
-        public async Task<ApiResponseDto<TDto>> AnyAsync(Expression<Func<T, bool>> expression)
+        public virtual async Task<ApiResponseDto<TDto>> AnyAsync(Expression<Func<T, bool>> expression)
         {
             var entity = await _repository.AnyAsync(expression);
 
@@ -58,7 +62,7 @@ namespace OrderApp.Infrastructure.Services
             return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<List<TDto>>> GetAllAsync()
+        public virtual async Task<ApiResponseDto<List<TDto>>> GetAllAsync(List<FilterDTO> filters)
         {
             var entities = await _repository.GetAll().ToListAsync();
 
@@ -67,12 +71,14 @@ namespace OrderApp.Infrastructure.Services
                 throw new NotFoundException(MagicStrings.NotFoundMessage<T>());
             }
 
-            var mapped = _mapper.Map<List<TDto>>(entities);
+            var data = _filterService.GetFilteredData(entities, filters, out FilterResultDto filterResult);
 
-            return ApiResponseDto<List<TDto>>.Success(mapped);
+            var mapped = _mapper.Map<List<TDto>>(data);
+
+            return ApiResponseDto<List<TDto>>.Success(mapped, filterResult);
         }
 
-        public async Task<ApiResponseDto<TDto>> GetByIdAsync(int id)
+        public virtual async Task<ApiResponseDto<TDto>> GetByIdAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
 
@@ -85,7 +91,7 @@ namespace OrderApp.Infrastructure.Services
             return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<TDto>> RemoveAsync(int id)
+        public virtual async Task<ApiResponseDto<TDto>> RemoveAsync(int id)
         {
             var remove = await _repository.GetByIdAsync(id);
 
@@ -101,7 +107,7 @@ namespace OrderApp.Infrastructure.Services
             return ApiResponseDto<TDto>.Success(mapped);
         }
 
-        public async Task<ApiResponseDto<List<TDto>>> RemoveRangeAsync(List<TDto> entities)
+        public virtual async Task<ApiResponseDto<List<TDto>>> RemoveRangeAsync(List<TDto> entities)
         {
             try
             {
@@ -117,7 +123,7 @@ namespace OrderApp.Infrastructure.Services
             }
         }
 
-        public async Task<ApiResponseDto<TDto>> UpdateAsync(TDto entity)
+        public virtual async Task<ApiResponseDto<TDto>> UpdateAsync(TDto entity)
         {
             try
             {
@@ -133,7 +139,7 @@ namespace OrderApp.Infrastructure.Services
             }
         }
 
-        public async Task<ApiResponseDto<List<TDto>>> Where(Expression<Func<T, bool>> expression)
+        public virtual async Task<ApiResponseDto<List<TDto>>> Where(Expression<Func<T, bool>> expression)
         {
             var entities = await _repository.Where(expression).ToListAsync();
 

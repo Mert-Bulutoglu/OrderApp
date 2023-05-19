@@ -16,14 +16,15 @@ namespace OrderApp.Infrastructure.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;   
-        public OrderService(IGenericRepository<Order> repository, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _orderRepository = orderRepository;
-        }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IFilterService<Order> _filterService;
 
-  
+        public OrderService(IGenericRepository<Order> repository, IOrderRepository orderRepository, IFilterService<Order> filterService, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, filterService, unitOfWork, mapper)
+        {
+            _orderRepository = orderRepository;
+            _mapper = mapper;
+            _filterService = filterService;
+            _unitOfWork = unitOfWork;
+        }
     }
 }

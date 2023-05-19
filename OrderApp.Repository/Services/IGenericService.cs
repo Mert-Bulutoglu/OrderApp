@@ -1,4 +1,5 @@
-﻿using OrderApp.Repository.DTOs.ResponseDTOs;
+﻿using OrderApp.Repository.DTOs.RequestDTOs;
+using OrderApp.Repository.DTOs.ResponseDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace OrderApp.Repository.Services
     public interface IGenericService<T, TDto> where T : class
     {
         public Task<ApiResponseDto<TDto>> GetByIdAsync(int id);
-        public Task<ApiResponseDto<List<TDto>>> GetAllAsync();
+        public Task<ApiResponseDto<List<TDto>>> GetAllAsync(List<FilterDTO> filters);
         public Task<ApiResponseDto<List<TDto>>> Where(Expression<Func<T, bool>> expression);
         public Task<ApiResponseDto<TDto>> AnyAsync(Expression<Func<T, bool>> expression);
         public Task<ApiResponseDto<TDto>> AddAsync(TDto entity);

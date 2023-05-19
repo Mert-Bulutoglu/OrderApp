@@ -1,4 +1,5 @@
 ﻿using OrderApp.Domain.Abstract;
+using OrderApp.Domain.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace OrderApp.Domain.Concrete.Entities
     {
         public int Id { get; set; }
         public string? Description { get; set; }
+
+        [Filter]
         public string? Category { get; set; }
         public string? Unit { get; set; }
         public decimal UnitPrice { get; set; }

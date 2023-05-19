@@ -17,10 +17,12 @@ namespace OrderApp.API.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
             #region Services
+
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+            services.AddScoped(typeof(IFilterService<>), typeof(FilterService<>));
             #endregion
 
             return services;

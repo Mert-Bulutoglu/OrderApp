@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApp.API.Extensions;
+using OrderApp.API.Middlewares;
 using OrderApp.Infrastructure.Mapping;
 using OrderApp.Persistance.Context;
 using System.Reflection;
@@ -28,6 +29,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrderApp.Repository.DTOs.ResponseDTOs
+namespace OrderApp.Repository.DTOs.RequestDTOs
 {
     public class CreateOrderRequestDto
     {
