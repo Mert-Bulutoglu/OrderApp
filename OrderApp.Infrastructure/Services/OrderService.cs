@@ -8,6 +8,7 @@ using OrderApp.Repository.DTOs.RequestDTOs;
 using OrderApp.Repository.DTOs.ResponseDTOs;
 using OrderApp.Repository.Repositories;
 using OrderApp.Repository.Services;
+using OrderApp.Repository.SMTP;
 using OrderApp.Repository.UnitOfWorks;
 using StackExchange.Redis;
 using Order = OrderApp.Domain.Concrete.Entities.Order;
@@ -22,8 +23,9 @@ namespace OrderApp.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFilterService<Order> _filterService;
+        private readonly IMailSenderBackgroundService _mailSenderBackgroundService;
 
-        public OrderService(IGenericRepository<Order> repository, IProductRepository productRepository, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IFilterService<Order> filterService, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, filterService, unitOfWork, mapper)
+        public OrderService(IGenericRepository<Order> repository,IMailSenderBackgroundService mailSenderBackgroundService, IProductRepository productRepository, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IFilterService<Order> filterService, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, filterService, unitOfWork, mapper)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -31,6 +33,7 @@ namespace OrderApp.Infrastructure.Services
             _mapper = mapper;
             _filterService = filterService;
             _unitOfWork = unitOfWork;
+            _mailSenderBackgroundService = mailSenderBackgroundService;
         }
 
         public override async Task<ApiResponseDto<CreateOrderRequestDto>> AddAsync(CreateOrderRequestDto entity)
@@ -61,6 +64,8 @@ namespace OrderApp.Infrastructure.Services
 
             mappedOrder.TotalAmount = TotalPrice;
             await _unitOfWork.CommitAsync();
+
+            await _mailSenderBackgroundService.SendSuccessMailAsync(mappedOrder.CustomerEmail);
 
             var responseEntity = _mapper.Map<CreateOrderRequestDto>(mappedOrder);
             return ApiResponseDto<CreateOrderRequestDto>.Success(responseEntity);

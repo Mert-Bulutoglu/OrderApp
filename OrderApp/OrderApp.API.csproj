@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OrderApp.Caching\OrderApp.Caching.csproj" />
     <ProjectReference Include="..\OrderApp.Infrastructure\OrderApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\OrderApp.RabbitMQ\OrderApp.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ using System.Reflection;
 using OrderApp.Infrastructure.Validations;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using OrderApp.RabbitMQ.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
@@ -41,6 +42,8 @@ builder.Services.AddDbContext<AppDbContext>(x =>
 
 var redisConfiguration = builder.Configuration.GetSection("ConnectionStrings").Get<RedisConfiguration>();
 builder.Services.AddSingleton(redisConfiguration);
+
+builder.Services.Configure<RabbitMQConfiguration>(builder.Configuration.GetSection("RabbitMQConfiguration"));
 
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerGen();
