@@ -37,13 +37,9 @@ namespace OrderApp.RabbitMQ.Services
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
-                foreach (var to in tos)
-                {
-                    var routingKey = $"OrderSuccessfullyCompleted.{to}";
-                    var messageBody = Encoding.UTF8.GetBytes("Order successfully completed.");
-
-                    channel.BasicPublish("", queueName, properties, messageBody);
-                }
+                var messageBody = Encoding.UTF8.GetBytes("Order successfully completed.");
+                channel.BasicPublish("", queueName, properties, messageBody);
+               
             }
 
             MailMessage mail = new();
@@ -56,17 +52,19 @@ namespace OrderApp.RabbitMQ.Services
 
             SmtpClient smtp = new();
             smtp.Credentials = new NetworkCredential(_config["Mail:Username"], _config["Mail:Password"]);
-            smtp.Port = 587;
+            smtp.Port = Convert.ToInt32(_config["Mail:Port"]);
             smtp.EnableSsl = true;
             smtp.Host = _config["Mail:Host"];
             await smtp.SendMailAsync(mail);
+
         }
 
 
         public async Task SendSuccessMailAsync(string to)
         {
             StringBuilder mail = new();
-            mail.AppendLine("Hello<br>Order successfully completed.</br><br>");
+            mail.AppendLine("Hello<br><br>Order successfully completed.</br><br><br>");
+            mail.AppendLine("<br><br><span style=\"font-size:12px;\">NOTE: If this request has not been fulfilled by you, please do not take this e-mail seriously.</span><br/><br/><br>Kind Regards...<br><br><br>Order App<br/><br/><br/><br/>");
             await SendMailAsync(to, "Nice!", mail.ToString());
         }
 

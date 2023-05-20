@@ -14,8 +14,8 @@ namespace OrderApp.API.Controllers
             _service = productService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> All(List<FilterDTO> Filters)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetProducts(List<FilterDTO> Filters)
         {
             return Ok(await _service.GetAllAsync(Filters));
         }
